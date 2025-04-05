@@ -4,53 +4,67 @@ function drawLayer(layer) {
     layer.draw(ctx);
 }
 
+// =========================
+// Layer Generation
+// =========================
+
+/**
+ * Generates a Layer with a given number of obstacles, offset by x and y.
+ */
 function generateLayer(obstacleAmount, xOffset, yOffset) {
-    layer = new Layer([])
+    var layer = new Layer([]);
 
     for (let i = 0; i < obstacleAmount; i++) {
+        const x = window.innerWidth / 2 + xOffset;
+        const y = delta(yOffset - 300, yOffset) + 300;
+
         layer.shapes.push(
             new Shape(
-                window.innerWidth / 2 + xOffset,
-                delta(yOffset-300,yOffset)+300,
+                x,
+                y,
                 SHAPE_WIDTH,
                 SHAPE_WIDTH,
                 SHAPE_COLOR,
                 true
             )
-        )
+        );
     }
 
     return layer;
 }
 
+// =========================
+// Layer Initialization
+// =========================
+
 var layers = [
-    generateLayer(1, -BACKGROUND_WIDTH/2 + SHAPE_WIDTH/2, window.innerHeight),
+    generateLayer(1, -BACKGROUND_WIDTH / 2 + SHAPE_WIDTH / 2, window.innerHeight),
     generateLayer(1, 0, window.innerHeight),
-    generateLayer(1,  BACKGROUND_WIDTH/2 - SHAPE_WIDTH/2, window.innerHeight),
+    generateLayer(1, BACKGROUND_WIDTH / 2 - SHAPE_WIDTH / 2, window.innerHeight)
 ];
 
+// =========================
+// Layer Handling & Input
+// =========================
+
+/**
+ * Handles switching between layers and rendering them with opacity.
+ */
 function handleLayers() {
     var maxLayer = layers.length - 1;
-    if (keyboard.key == "ArrowDown") {
-        if (activeLayer != 0) {
-            activeLayer--;
-        }
-        keyboard.key = null;
-    } else if (keyboard.key == "ArrowUp") {
-        if (activeLayer != maxLayer) {
-            activeLayer++;
-        }
-        keyboard.key = null;
+
+    if (keyboard.key === "ArrowDown" && activeLayer > 0) {
+        activeLayer--;
+        keyboard.key = null; // TODO(isakh): The keyboard manager should handle this
+    } else if (keyboard.key === "ArrowUp" && activeLayer < maxLayer) {
+        activeLayer++;
+        keyboard.key = null; // TODO(isakh): The keyboard manager should handle this
     }
 
+    // Draw all layers with opacity based on distance from the active layer
     for (let i = 0; i < layers.length; i++) {
         const diff = difference(activeLayer, i);
-        const alpha = 1.0 - diff * 0.4;
-        layers[i].alpha = alpha
+        layers[i].alpha = 1.0 - diff * 0.4;
         drawLayer(layers[i]);
     }
-}
-
-function delta(min, max) {
-    return Math.random() * (max - min) + min;
 }

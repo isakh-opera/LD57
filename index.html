@@ -1,31 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="styles.css" />
-		<title>LD57</title>
-	</head>
-	<body>
-        <canvas id="canvas"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>LD57</title>
+  </head>
+  <body>
+    <!-- Main game canvas -->
+    <canvas id="canvas"></canvas>
 
+    <!-- =======================
+         GLOBALS & UTILITIES
+         ======================= -->
+    <!-- Shared variables, constants, and helper functions -->
+    <script src="globals.js"></script>
+    <script src="utils.js"></script>
 
-        <!-- UTILS, SHARED VARIABLES AND CONSTANTS -->
-        <script src="globals.js"></script>
-        <script src="utils.js"></script>
-        
-        <!-- CLASS IMPLEMENTATIONS -->
-        <script src="classes/shape.js"></script>
-        <script src="classes/character.js"></script>
-        <script src="classes/layer.js"></script>
-        
-        <!-- VARIOUS LOGIC -->
-        <script src="managers/keyboard_manager.js"></script>
-        <script src="managers/layer_handler.js"></script>
-        <script src="managers/score.js"></script>
-        <script src="managers/collision.js"></script>
-		
-        <!-- MAIN GAME LOOP -->
-        <script src="script.js"></script>
-	</body>
+    <!-- =======================
+         CORE CLASSES
+         ======================= -->
+    <!-- Base game object and entities -->
+    <script src="classes/shape.js"></script>
+    <script src="classes/character.js"></script>
+    <script src="classes/layer.js"></script>
+
+    <!-- =======================
+         GAME MANAGERS
+         ======================= -->
+    <!-- Input, game state, and systems -->
+    <script src="managers/keyboard_manager.js"></script>
+    <script src="managers/layer_handler.js"></script>
+    <script src="managers/score.js"></script>
+    <script src="managers/collision.js"></script>
+
+    <!-- =======================
+         MAIN GAME LOOP
+         ======================= -->
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -1,16 +1,31 @@
-body {
-    min-width: 100%;
+/* ================
+   Base Styles
+   ================ */
+
+   body {
     margin: 0;
+    min-width: 100%;
     overflow: hidden;
+    font-family: sans-serif;
+    background-color: #000;
 }
+
+/* ================
+   Canvas Styling
+   ================ */
 
 canvas {
-    min-width: 100%;
     display: block;
-    background: #000;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
 }
 
-.endgame_input {
+/* ================
+   Endgame Input Overlay
+   ================ */
+
+.endgame-input {
     position: absolute;
     top: 0;
 }
