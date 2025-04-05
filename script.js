@@ -34,6 +34,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const character = new Character(canvas.width / 2, canvas.height / 2, canvas.width / 2 - 640 / 2 + 20, canvas.width / 2 + 640 / 2 - 20);
+character.initBlocks();
 
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
@@ -259,8 +260,9 @@ function update() {
         }
     }
     else {
-        character.update();
         draw();
+
+        character.update();
 
         handleLayers();
     }

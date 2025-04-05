@@ -11,7 +11,6 @@ class Character {
         this.blocks = [];
     }
 
-
     initBlocks() {
         this.blocks.push(new BlockCircle(this.x, this.y, this.radius));
         // this.blocks.push(new BlockRectangle(this.x - 15, this.y + this.radius, 30, 40));
@@ -43,9 +42,9 @@ class Character {
     }
 
     draw() {
-        for(let block of this.blocks) {
+        for(let i = 0; i < this.blocks.length; i++) {
             ctx.fillStyle = "#FF0000";
-            block.draw();
+            this.blocks[i].draw();
         }
     }
 
