@@ -1,0 +1,16 @@
+body {
+    min-width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+canvas {
+    min-width: 100%;
+    display: block;
+    background: #000;
+}
+
+.endgame_input {
+    position: absolute;
+    top: 0;
+}
