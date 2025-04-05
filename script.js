@@ -161,13 +161,13 @@ const drawIntro = () => {
 
     if (ANIMATED_PLAYER_DATA.y > window.innerHeight + 64) ANIMATION_FINISHED = true;
 
-    if (!PLAY_ANIMATION) {
-        // TODO: Implement fade out transition for clouds
-        clouds.forEach(cloud => {
-            cloud.update();
-            cloud.draw();
-        });
-    }
+    clouds.forEach(cloud => {
+        cloud.update();
+        if(PLAY_ANIMATION) {
+            cloud.lowerAlpha();
+        }
+        cloud.draw();
+    });
 
     ctx.globalAlpha = TITLE_ALPHA;
     ctx.strokeStyle = "#000";
@@ -189,18 +189,38 @@ class Cloud {
         const centerX = window.innerWidth / 2;
         this.size = Math.random() * 50 + 30;
         this.x = Math.random() * (640 - this.size) + (centerX - 640 / 2 + this.size);
-        this.y = Math.random() * 512;
+        this.y = Math.random() * 256;
         this.speed = Math.random() * 0.5 + 0.2;
-        this.alpha = Math.random();
+        this.targetAlpha = Math.random(); 
+        this.alpha = 0;
+    }
+
+    raiseAlpha() {
+        if (this.alpha < this.targetAlpha) {
+            this.alpha += 0.01;
+        }
+    }
+
+    lowerAlpha() {
+        if (this.alpha > 0) {
+            this.alpha -= 0.01;
+        }
     }
 
     update() {
         this.x += this.speed;
         const centerX = window.innerWidth / 2;
         const rightBoundary = centerX + 640 / 2 - this.size;
-        if (this.x > rightBoundary) {
+        if (this.x > rightBoundary - this.size) {
+            this.lowerAlpha();
+        }
+        else if (!PLAY_ANIMATION) {
+            this.raiseAlpha();
+        }
+        if (this.x > rightBoundary && !PLAY_ANIMATION) {
             this.x = Math.random() * (640 - this.size) + (centerX - 640 / 2 + this.size);
-            this.y = Math.random() * 512;
+            this.y = Math.random() * 256;
+            this.alpha = 0;
         }
     }
 
