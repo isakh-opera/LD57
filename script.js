@@ -410,6 +410,8 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const increaseSpeedAmount = speedControler.getIncreaseAmount();
 
+    soundManager.increasePlaybackRate(increaseSpeedAmount / 100);
+
     drawBackground();
     increaseLayerSpeed(increaseSpeedAmount);
     handleLayers();

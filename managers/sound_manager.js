@@ -2,6 +2,8 @@ function SoundManager() {
     this.sounds = {};
     this.music = null;
     this.isPlaying = false;
+    this.maxPlaybackRate = 160 / 90;
+    this.playbackSpeed = 1.0;
 }
 
 SoundManager.prototype.loadSound = function (name, url) {
@@ -19,6 +21,17 @@ SoundManager.prototype.playSound = function (name) {
         console.warn(`Sound ${name} not loaded!`);
     }
 };
+
+SoundManager.prototype.increasePlaybackRate = function (amount) {
+    if(this.playbackSpeed < this.maxPlaybackRate) {
+        this.playbackSpeed += amount;
+    }
+    else {
+        this.playbackSpeed = this.maxPlaybackRate;
+    }
+    this.music.playbackRate = this.playbackSpeed;
+};
+
 
 SoundManager.prototype.loadMusic = function (url) {
     this.music = new Audio(url);
@@ -48,6 +61,7 @@ SoundManager.prototype.stopMusic = function () {
         this.music.pause();
         this.music.currentTime = 0;
         this.isPlaying = false;
+        this.playbackSpeed = 1.0;
     }
 };
 
