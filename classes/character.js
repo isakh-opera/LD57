@@ -110,7 +110,7 @@ class Character {
     checkCollision(obstacle) {
         for(let block of this.blocks) {
             const absolutePoints = obstacle.points.reduce((acc, point) => {
-                acc.push(point[0], point[1] + polygon.offset);
+                acc.push(point[0], point[1] + obstacle.offset);
                 return acc;
             }, []);
             if  (Intersects.circlePolygon(block.x, block.y, block.radius, absolutePoints)) {

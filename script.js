@@ -263,6 +263,9 @@ function update() {
         draw();
 
         character.update();
+        getActiveObstacles().forEach((shape) => {
+            character.updateByCollision(shape);
+        });
     }
 
     requestAnimationFrame(update);

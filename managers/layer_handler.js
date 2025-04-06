@@ -68,3 +68,7 @@ function handleLayers() {
         drawLayer(layers[i]);
     }
 }
+
+function getActiveObstacles() {
+    return layers[activeLayer].shapes;
+}
