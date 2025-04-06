@@ -3,7 +3,7 @@ name: Publish game
 on:
   push:
     branches:
-      - main
+      - github-page
 
 jobs:
   build:
