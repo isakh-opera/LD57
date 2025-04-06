@@ -6,14 +6,23 @@ on:
       - main
 
 jobs:
-  # Build job
   build:
-    # <Not provided for brevity>
-    # At a minimum this job should upload artifacts using actions/upload-pages-artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Remove backend
+        run: |
+          rm -fr server
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+          retention-days: 1
 
   # Deploy job
   deploy:
-    # Add a dependency to the build job
     needs: build
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
