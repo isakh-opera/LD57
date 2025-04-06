@@ -1,5 +1,5 @@
 class Shape {
-    constructor(x, y, height, width, color, obstacle) {
+    constructor(x, y, height, width, color, obstacle, offsetSpeed) {
         this.x = x;
         this.y = y;
         this.worldX= x;
@@ -11,11 +11,11 @@ class Shape {
         this.generatePoints(obstacle);
         this.createdNext = false;
         this.offset = 0;
-        this.offsetSpeed = 2;
+        this.offsetSpeed = offsetSpeed;
     }
 
-    increaseSpeed(delta) {
-        this.offsetSpeed += delta;
+    setOffsetSpeed(offsetSpeed) {
+        this.offsetSpeed = offsetSpeed;
     }
 
     // mviana:

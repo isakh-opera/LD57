@@ -384,9 +384,10 @@ function drawBackground() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //const increaseSpeedAmount = speedControler.getSpeedAmount();
+    const increaseSpeedAmount = speedControler.getIncreaseAmount();
 
     drawBackground();
+    increaseLayerSpeed(increaseSpeedAmount);
     handleLayers();
     renderCharacter();
     renderScore(window.innerWidth / 2);

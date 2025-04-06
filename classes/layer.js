@@ -5,12 +5,19 @@ class Layer {
     constructor(shapes) {
         this.shapes = shapes;
         this.alpha = 1.0;
+        this.offsetSpeed = 2;
+    }
+
+    setOffsetSpeed(offsetSpeed) {
+        this.offsetSpeed = offsetSpeed;
     }
 
     increaseSpeed(delta) {
+        this.offsetSpeed += delta;
+
         for (let shape of this.shapes) {
-            shape.speed += delta;
-        }
+            shape.setOffsetSpeed(this.offsetSpeed);
+        }   
     }
 
     draw(context) {
@@ -46,7 +53,8 @@ class Layer {
                     SHAPE_WIDTH,
                     SHAPE_WIDTH,
                     SHAPE_COLOR,
-                    true
+                    true,
+                    this.offsetSpeed
                 )
             );
         }

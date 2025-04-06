@@ -13,7 +13,7 @@ function drawLayer(layer) {
  */
 function generateLayer(obstacleAmount, xOffset, yOffset) {
     var layer = new Layer([]);
-
+    layer.setOffsetSpeed(2);
     for (let i = 0; i < obstacleAmount; i++) {
         const x = window.innerWidth / 2 + xOffset;
         const y = delta(yOffset - 300, yOffset) + 300;
@@ -25,7 +25,8 @@ function generateLayer(obstacleAmount, xOffset, yOffset) {
                 SHAPE_WIDTH,
                 SHAPE_WIDTH,
                 SHAPE_COLOR,
-                true
+                true,
+                layer.offsetSpeed
             )
         );
     }
@@ -71,9 +72,11 @@ function handleLayers() {
  * Increases the speed of all layers by a given delta.
  */
 function increaseLayerSpeed(delta) {
-    layers.forEach(layer => {
-        layer.increaseSpeed(delta); 
-    });
+    if (delta > 0) {    
+        for (let layer of layers) {
+            layer.increaseSpeed(delta); 
+        }
+    }
 }
 
 /**
