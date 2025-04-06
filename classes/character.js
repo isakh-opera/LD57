@@ -4,7 +4,7 @@ class Character {
         this.y = y;
         this.xradius = 25;
         this.yradius = 16;
-        this.speed = 16;
+        this.speed = 10;
         this.boundaryLeft = boundaryLeft;
         this.boundaryRight = boundaryRight;
         this.hasCollision = false;
@@ -39,10 +39,10 @@ class Character {
         this.handDistance = 50 + Math.sin(this.handAngle) * 20;
 
         let dx = 0;
-        if (keys.ArrowLeft && this.x > this.boundaryLeft) {
+        if (getKeyboard().isArrowLeftWithoutDebounce() && this.x > this.boundaryLeft) {
             dx = -this.speed;
         }
-        if (keys.ArrowRight && this.x < this.boundaryRight) {
+        if (getKeyboard().isArrowRightWithoutDebounce() && this.x < this.boundaryRight) {
             dx = this.speed;
         }
 
