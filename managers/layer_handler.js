@@ -68,6 +68,15 @@ function handleLayers() {
 }
 
 /**
+ * Increases the speed of all layers by a given delta.
+ */
+function increaseLayerSpeed(delta) {
+    layers.forEach(layer => {
+        layer.increaseSpeed(delta); 
+    });
+}
+
+/**
  * Retuen obstabcles on the current active layer
  */
 function getActiveObstacles() {

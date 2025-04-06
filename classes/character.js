@@ -13,7 +13,7 @@ class Character {
 
         // TODO(isakh): Improve how this is handled
         this.playerSprite = new Image(64, 64);
-        this.playerSprite.src = "./res/player-variant.png";
+        this.playerSprite.src = "./res/player-highres.png";
 
         this.leftHand = new Image(32, 32);
         this.leftHand.src = "./res/hand-left.png";
@@ -65,14 +65,30 @@ class Character {
         const rightHandX = this.x + 32 + Math.cos(this.handAngle + Math.PI) * this.handDistance;
         const rightHandY = this.y - 32 + 16 + Math.sin(this.handAngle + Math.PI) * this.handDistance;
 
+        ctx.lineWidth = 8;
+
         ctx.beginPath();
-        ctx.moveTo(this.x - 32 - 24 + 32, this.y - 32 + 32);
+        ctx.moveTo(this.x - 24, this.y);
+        ctx.lineTo(leftHandX, leftHandY);
+        ctx.strokeStyle = "#612514";
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(this.x + 24, this.y);
+        ctx.lineTo(rightHandX, rightHandY);
+        ctx.strokeStyle = "#612514";
+        ctx.stroke();
+
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+        ctx.moveTo(this.x - 24, this.y);
         ctx.lineTo(leftHandX, leftHandY);
         ctx.strokeStyle = "#f5bf2f";
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.moveTo(this.x - 32 + 24 + 32, this.y - 32 + 32);
+        ctx.moveTo(this.x + 24, this.y);
         ctx.lineTo(rightHandX, rightHandY);
         ctx.strokeStyle = "#f5bf2f";
         ctx.stroke();

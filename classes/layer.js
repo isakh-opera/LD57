@@ -7,6 +7,12 @@ class Layer {
         this.alpha = 1.0;
     }
 
+    increaseSpeed(delta) {
+        for (let shape of this.shapes) {
+            shape.speed += delta;
+        }
+    }
+
     draw(context) {
         let deepestY = 0;
 

@@ -16,33 +16,39 @@ const keys = {
     ArrowRight: false,
 };
 
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const character = new Character(
+    canvas.width / 2, canvas.height / 2,
+    canvas.width / 2 - 640 / 2 + 20, canvas.width / 2 + 640 / 2 - 20);
+
+const speedControler = new SpeedControler();
+
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
 // Add keyboard event listeners
 window.addEventListener("keydown", (e) => {
     if (e.key in keys) {
         keys[e.key] = true;
     }
 
-    if (e.code === "Space" && !PLAY_ANIMATION) PLAY_ANIMATION = true;
+    if (e.code === "Space" && !PLAY_ANIMATION) {
+        PLAY_ANIMATION = true;
+        speedControler.reset();
+    }
 });
 
 window.addEventListener("keyup", (e) => {
     if (e.key in keys) {
         keys[e.key] = false;
     }
-});
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const character = new Character(
-    canvas.width / 2, canvas.height / 2,
-    canvas.width / 2 - 640 / 2 + 20, canvas.width / 2 + 640 / 2 - 20);
-
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 });
 
 
@@ -65,26 +71,26 @@ const ANIMATED_PLAYER_DATA = {
 let HAND_ANGLE = 0;
 let HAND_DISTANCE = 0;
 
+const drawGradientRect = (x, y, w, h, stops) => {
+    const grad = ctx.createLinearGradient(0, y, 0, y + h);
+    stops.forEach(([pos, color]) => grad.addColorStop(pos, color));
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, y, w, h);
+};
+
 const drawIntro = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const drawGradientRect = (x, y, w, h, stops) => {
-        const grad = ctx.createLinearGradient(0, y, 0, y + h);
-        stops.forEach(([pos, color]) => grad.addColorStop(pos, color));
-        ctx.fillStyle = grad;
-        ctx.fillRect(x, y, w, h);
-    };
 
     const centerX = window.innerWidth / 2 - 640 / 2;
 
     drawGradientRect(centerX, 0, 640, window.innerHeight / 2, [
-        [0, "#D5F3FE"],
-        [1, "#1E88E5"],
+        [0, SKY_GRADIENT_COLOR_1],
+        [1, SKY_GRADIENT_COLOR_2],
     ]);
 
     drawGradientRect(centerX, window.innerHeight / 2 - GRADIENT_OFFSET, 640, window.innerHeight, [
-        [0, "#6c370b"],
-        [1, "black"],
+        [0, BACKGROUND_GRADIENT_COLOR_1],
+        [1, BACKGROUND_GRADIENT_COLOR_2],
     ]);
 
     const drawWall = (obj, startX) => {
@@ -116,7 +122,21 @@ const drawIntro = () => {
         rightHandY = ANIMATED_PLAYER_DATA.y + 16;
     }
 
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 8;
+
+    ctx.beginPath();
+    ctx.moveTo(ANIMATED_PLAYER_DATA.x - 24 + 32, ANIMATED_PLAYER_DATA.y + 32);
+    ctx.lineTo(leftHandX, leftHandY);
+    ctx.strokeStyle = "#612514";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(ANIMATED_PLAYER_DATA.x + 24 + 32, ANIMATED_PLAYER_DATA.y + 32);
+    ctx.lineTo(rightHandX, rightHandY);
+    ctx.strokeStyle = "#612514";
+    ctx.stroke();
+
+    ctx.lineWidth = 4;
 
     ctx.beginPath();
     ctx.moveTo(ANIMATED_PLAYER_DATA.x - 24 + 32, ANIMATED_PLAYER_DATA.y + 32);
@@ -224,21 +244,17 @@ for (let i = 0; i < 10; i++) {
 async function drawEndgame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const grad = ctx.createLinearGradient(0, 0, 0, window.innerHeight / 2);
-    grad.addColorStop(0, "lightblue");
-    grad.addColorStop(1, "darkblue");
+    const centerX = window.innerWidth / 2 - 640 / 2;
 
-    ctx.fillStyle = grad;
-    ctx.fillRect(window.innerWidth / 2 - 640 / 2, 0, 640, window.innerHeight / 2);
+    drawGradientRect(centerX, 0, 640, window.innerHeight / 2, [
+        [0, SKY_GRADIENT_COLOR_1],
+        [1, SKY_GRADIENT_COLOR_2],
+    ]);
 
-    const grad2 = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
-    grad2.addColorStop(0, "#6c370b");
-    grad2.addColorStop(1, "black");
-
-    ctx.fillStyle = grad2;
-    ctx.fillRect(window.innerWidth / 2 - 640 / 2, window.innerHeight / 2, 640, window.innerHeight);
-
-    ctx.fillRect(window.innerWidth / 2 + 640 / 2 - 172, window.innerHeight / 2, 172, window.innerHeight);
+    drawGradientRect(centerX, window.innerHeight / 2, 640, window.innerHeight, [
+        [0, BACKGROUND_GRADIENT_COLOR_1],
+        [1, BACKGROUND_GRADIENT_COLOR_2],
+    ]);
 
     ctx.fillStyle = "#000000";
     ctx.font = "48px serif";
@@ -271,13 +287,31 @@ async function drawEndgame() {
         }
     }
 
-
     let userHeight = 300;
     for (let user of ranking) {
         ctx.fillText(user.username, window.innerWidth / 2 - 200, userHeight);
         ctx.fillText(score.formatTime(user.score), window.innerWidth / 2 + 100, userHeight);
         userHeight+=40;
     }
+
+    /*
+    ctx.font = "24px serif";
+    const description = "(press space to play again)";
+    ctx.fillText(description, window.innerWidth / 2 - ctx.measureText(description).width / 2, 216);
+    */
+
+    ctx.drawImage(leftWall, window.innerWidth/2 - BACKGROUND_WIDTH/2, window.innerHeight/2, 128*1.5, 256*1.5);
+    ctx.drawImage(rightWall, window.innerWidth/2 + BACKGROUND_WIDTH/2 - 128*1.5, window.innerHeight/2, 128*1.5, 256*1.5);
+}
+
+function resetGameState() {
+    GAME_STARTED = false;
+    GAME_OVER = false;
+    PLAY_ANIMATION = false;
+    ANIMATION_FINISHED = false;
+    GRADIENT_OFFSET = 0;
+    WALLS_OFFSET = 0;
+    TITLE_ALPHA = 1;
 }
 
 function update() {
@@ -340,8 +374,8 @@ function renderCharacter() {
 
 function drawBackground() {
     const grad2 = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
-    grad2.addColorStop(0, "#6c370b");
-    grad2.addColorStop(1, "black");
+    grad2.addColorStop(0, BACKGROUND_GRADIENT_COLOR_1);
+    grad2.addColorStop(1, BACKGROUND_GRADIENT_COLOR_2);
 
     ctx.globalAlpha = 1.0;
     ctx.fillStyle = grad2;
@@ -350,6 +384,7 @@ function drawBackground() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //const increaseSpeedAmount = speedControler.getSpeedAmount();
 
     drawBackground();
     handleLayers();

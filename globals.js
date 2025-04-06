@@ -1,10 +1,13 @@
-// ========== Title Screen Settings ==========
+// ========== Title/End Screen Settings ==========
+const SKY_GRADIENT_COLOR_1 = "#D5F3FE";
+const SKY_GRADIENT_COLOR_2 = "#1E88E5";
+
 const gameTitle = new Image(77, 32);
 gameTitle.src = "res/gametitle-highres.png";
 
 // ========== Player Settings ==========
 const playerBody = new Image(64, 64);
-playerBody.src = "res/player-variant.png";
+playerBody.src = "res/player-highres.png";
 
 const leftHand = new Image(32, 32);
 leftHand.src = "res/hand-left.png";
@@ -14,6 +17,9 @@ rightHand.src = "res/hand-right.png";
 
 // ========== Background Settings ==========
 const BACKGROUND_WIDTH = 640;
+
+const BACKGROUND_GRADIENT_COLOR_1 = "#6c370b";
+const BACKGROUND_GRADIENT_COLOR_2 = "black";
 
 const rightWall = new Image(256, 1024);
 rightWall.src = "res/wall-right-highres.png";

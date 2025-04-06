@@ -14,6 +14,10 @@ class Shape {
         this.offsetSpeed = 2;
     }
 
+    increaseSpeed(delta) {
+        this.offsetSpeed += delta;
+    }
+
     // mviana:
     // status: rock format points
     generatePoints(obstacle){
