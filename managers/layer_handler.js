@@ -12,6 +12,7 @@ function generateLayer() {
     var layer = new Layer([]);
 
     const obstacleAmount = delta(1, 10);
+    layer.setOffsetSpeed(2);
     for (let i = 0; i < obstacleAmount; i++) {
         const x = window.innerWidth / 2 + delta(-BACKGROUND_WIDTH / 2 + SHAPE_WIDTH / 2, BACKGROUND_WIDTH / 2 - SHAPE_WIDTH / 2);
         const y = delta(window.innerHeight - 300, window.innerHeight) + 300;
@@ -23,7 +24,8 @@ function generateLayer() {
                 SHAPE_WIDTH,
                 SHAPE_WIDTH,
                 SHAPE_COLOR,
-                true
+                true,
+                layer.offsetSpeed
             )
         );
     }
@@ -69,9 +71,11 @@ function handleLayers() {
  * Increases the speed of all layers by a given delta.
  */
 function increaseLayerSpeed(delta) {
-    layers.forEach(layer => {
-        layer.increaseSpeed(delta); 
-    });
+    if (delta > 0) {    
+        for (let layer of layers) {
+            layer.increaseSpeed(delta); 
+        }
+    }
 }
 
 /**

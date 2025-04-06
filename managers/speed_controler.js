@@ -5,7 +5,7 @@ class SpeedControler {
         this.currentRelativeSpeed = 0;
 
         this.speedIncreaseAmount = 1;
-        this.speedIncreaseInterval = 5000; // 5 second
+        this.speedIncreaseInterval = 10 * 1000; // 10 seconds
     }
     
     getIncreaseAmount() {

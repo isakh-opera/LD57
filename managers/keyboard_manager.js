@@ -30,15 +30,46 @@ function KeyboardManager() {
         }
         return false;
     }
+    this.isArrowLeftWithoutDebounce = function() {
+        if (this.keys['ArrowLeft']) {
+            return true;
+        }
+        return false;
+    }
+
+    this.isArrowRightWithoutDebounce = function() {
+        if (this.keys['ArrowRight']) {
+            return true;
+        }
+        return false;
+    }
+    
+    this.onSpace = function(func) {
+        document.addEventListener("keydown", (event) => {
+            if (event.key === " " || event.code === "Space") {
+                func();
+            }
+        });
+    }
 }
 
 let keyboard = new KeyboardManager();
 
 document.addEventListener("keyup", (event) => {
     keyboard.keys[event.key] = false;
+
+    if (event.code === "KeyR" && GAME_OVER) {
+        if(endInput.style.visibility !== 'visible') {
+            resetGameState();
+        }
+    }
 });
 
 document.addEventListener("keydown", (event) => {
     keyboard.keys[event.key] = true;
     keyboard.lastKeyTime[event.key] = Date.now();
 });
+
+function getKeyboard() {
+    return keyboard;
+}

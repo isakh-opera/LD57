@@ -20,12 +20,6 @@ let ANIMATED_PLAYER_DATA = {
     angleDir: -1,
 };
 
-// Track key states
-const keys = {
-    ArrowLeft: false,
-    ArrowRight: false,
-};
-
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -38,36 +32,20 @@ let character = new Character(
 
 const speedControler = new SpeedControler();
 
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+getKeyboard().onSpace(() => {
+    PLAY_ANIMATION = true;
+    speedControler.reset();
 });
 
 const endInput = document.getElementsByClassName('endgame-input')[0];
 // Add keyboard event listeners
 window.addEventListener("keydown", (e) => {
-    if (e.key in keys) {
-        keys[e.key] = true;
-    }
-
-    if (e.code === "Space" && !PLAY_ANIMATION) {
-        PLAY_ANIMATION = true;
-        speedControler.reset();
-    }
-
     if (e.code === "KeyR" && GAME_OVER) {
         if(endInput.style.visibility !== 'visible') {
             resetGameState();
         }
     }
 });
-
-window.addEventListener("keyup", (e) => {
-    if (e.key in keys) {
-        keys[e.key] = false;
-    }
-});
-
 
 const score = new Score();
 const endgame = new Endgame();
@@ -410,9 +388,10 @@ function drawBackground() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //const increaseSpeedAmount = speedControler.getSpeedAmount();
+    const increaseSpeedAmount = speedControler.getIncreaseAmount();
 
     drawBackground();
+    increaseLayerSpeed(increaseSpeedAmount);
     handleLayers();
     renderCharacter();
     renderScore(window.innerWidth / 2);

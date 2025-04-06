@@ -1,10 +1,28 @@
+class BlockEllipse {
+    constructor(x, y, xradius, yradius) {
+        this.x = x;
+        this.y = y;
+        this.xradius = xradius;
+        this.yradius = yradius;
+        this.dx = 0;
+    }
+
+    updateX(dx) {   
+        this.x += dx;
+    }
+
+    updateY(dy) {
+        this.y += dy;
+    }
+}
+
 class Character {
     constructor(x, y, boundaryLeft, boundaryRight) {
         this.x = x;
         this.y = y;
         this.xradius = 25;
         this.yradius = 16;
-        this.speed = 16;
+        this.speed = 10;
         this.boundaryLeft = boundaryLeft;
         this.boundaryRight = boundaryRight;
         this.hasCollision = false;
@@ -39,10 +57,10 @@ class Character {
         this.handDistance = 50 + Math.sin(this.handAngle) * 20;
 
         let dx = 0;
-        if (keys.ArrowLeft && this.x > this.boundaryLeft) {
+        if (getKeyboard().isArrowLeftWithoutDebounce() && this.x > this.boundaryLeft) {
             dx = -this.speed;
         }
-        if (keys.ArrowRight && this.x < this.boundaryRight) {
+        if (getKeyboard().isArrowRightWithoutDebounce() && this.x < this.boundaryRight) {
             dx = this.speed;
         }
 
