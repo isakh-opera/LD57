@@ -4,11 +4,6 @@ class Block {
         this.y = y;
     }
 
-    // draw() {
-    //     // Default implementation in base class
-    //     throw new Error('Block.draw() must be implemented by subclass');
-    // }
-
     updateX(dx) {
         this.x += dx;
     }
@@ -25,13 +20,6 @@ class BlockEllipse extends Block {
         this.yradius = yradius;
         this.dx = 0;
     }
-
-    draw() {
-        ctx.beginPath();
-        ctx.ellipse(this.x, this.y, this.xradius, this.yradius, 0, 0, Math.PI * 2);
-        ctx.fillStyle = '#00FF00';
-        ctx.fill();
-    }
 }
 
 class BlockCircle extends Block {
@@ -39,13 +27,6 @@ class BlockCircle extends Block {
         super(x, y);
         this.radius = radius;
         this.dx = 0;
-    }
-
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#00FF00';
-        ctx.fill();
     }
 }
 
@@ -61,13 +42,6 @@ class BlockRectangle extends Block {
             [0, this.height]
         ]; // relative distance to the start point
     }
-
-    draw() {
-        ctx.beginPath();
-        ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.fillStyle = '#00FF00';
-        ctx.fill(); 
-    }
 }
 
 class BlockPolygon extends Block {
@@ -75,17 +49,6 @@ class BlockPolygon extends Block {
         super(x, y);
         this.points = points; // relative distance to the start point
     }
-
-    draw() {
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        for(let point of this.points) {
-            ctx.lineTo(this.x + point[0], this.y + point[1]);
-        }
-        ctx.closePath();
-        ctx.fillStyle = '#00FF00';
-        ctx.fill();
-    } 
 }
 
 function checkCollisionBetweenCircleAndCircle(circle1, circle2) {

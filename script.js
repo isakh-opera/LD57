@@ -62,21 +62,6 @@ const ANIMATED_PLAYER_DATA = {
     angleDir: -1,
 };
 
-const playerBody = new Image(64, 64);
-playerBody.src = "res/player-variant.png";
-
-const leftHand = new Image(32, 32);
-leftHand.src = "res/hand-left.png";
-
-const rightHand = new Image(32, 32);
-rightHand.src = "res/hand-right.png";
-
-const rightWall = new Image(256, 1024);
-rightWall.src = "res/right-wall.png";
-
-const leftWall = new Image(256, 1024);
-leftWall.src = "res/left-wall.png";
-
 let HAND_ANGLE = 0;
 let HAND_DISTANCE = 0;
 
@@ -102,21 +87,12 @@ const drawIntro = () => {
         [1, "black"],
     ]);
 
-    const drawWall = (obj, startX, direction) => {
-        ctx.fillStyle = "gray";
-        /*
-        ctx.beginPath();
-        ctx.moveTo(startX, window.innerHeight / 2 - WALLS_OFFSET);
-        ctx.lineTo(startX + 172 * direction, window.innerHeight / 2 - WALLS_OFFSET);
-        ctx.lineTo(startX, window.innerHeight - WALLS_OFFSET);
-        ctx.closePath();
-        ctx.fill();
-        */ 
-        ctx.drawImage(obj, startX, window.innerHeight / 2 - WALLS_OFFSET - 8, 256, 512);
+    const drawWall = (obj, startX) => {
+        ctx.drawImage(obj, startX, window.innerHeight / 2 - WALLS_OFFSET - 8, 128*1.5, 256*1.5);
     };
 
-    drawWall(leftWall, window.innerWidth / 2 - 640 / 2, 1);
-    drawWall(rightWall, window.innerWidth / 2 + 640 / 2 - 256, -1);
+    drawWall(leftWall, window.innerWidth / 2 - 640 / 2);
+    drawWall(rightWall, window.innerWidth / 2 + 640 / 2 - 128*1.5);
 
     ctx.fillStyle = "#ff0000";
     ctx.drawImage(playerBody, ANIMATED_PLAYER_DATA.x, ANIMATED_PLAYER_DATA.y, 64, 64);
@@ -145,13 +121,13 @@ const drawIntro = () => {
     ctx.beginPath();
     ctx.moveTo(ANIMATED_PLAYER_DATA.x - 24 + 32, ANIMATED_PLAYER_DATA.y + 32);
     ctx.lineTo(leftHandX, leftHandY);
-    ctx.strokeStyle = "#d3b764";
+    ctx.strokeStyle = "#f5bf2f";
     ctx.stroke();
 
     ctx.beginPath();
     ctx.moveTo(ANIMATED_PLAYER_DATA.x + 24 + 32, ANIMATED_PLAYER_DATA.y + 32);
     ctx.lineTo(rightHandX, rightHandY);
-    ctx.strokeStyle = "#d3b764";
+    ctx.strokeStyle = "#f5bf2f";
     ctx.stroke();
 
     ctx.save();
@@ -177,24 +153,19 @@ const drawIntro = () => {
     });
 
     ctx.globalAlpha = TITLE_ALPHA;
-    ctx.strokeStyle = "#000";
-    ctx.fillStyle = "#d3b764";
-    ctx.lineWidth = 4;
-    ctx.font = "48px serif";
-    const title = "gnoccholini droppotini";
-    ctx.strokeText(title, window.innerWidth / 2 - ctx.measureText(title).width / 2, 64);
-    ctx.fillText(title, window.innerWidth / 2 - ctx.measureText(title).width / 2, 64);
+    ctx.drawImage(gameTitle, window.innerWidth / 2 - (77*4)/2, 64, 77*4, 32*4);
+
     ctx.fillStyle = "#000000";
-    ctx.font = "32px serif";
+    ctx.font = "24px serif";
     const description = "(press space to start)";
-    ctx.fillText(description, window.innerWidth / 2 - ctx.measureText(description).width / 2, 112);
+    ctx.fillText(description, window.innerWidth / 2 - ctx.measureText(description).width / 2, 216);
     ctx.globalAlpha = 1;
 };
 
 class Cloud {
     constructor() {
         const centerX = window.innerWidth / 2;
-        this.size = Math.random() * 50 + 30;
+        this.size = 96;
         this.x = Math.random() * (640 - this.size) + (centerX - 640 / 2 + this.size);
         this.y = Math.random() * 256;
         this.speed = Math.random() * 0.5 + 0.2;
@@ -202,7 +173,7 @@ class Cloud {
         this.alpha = 0;
 
         this.imgSrc = new Image(32, 32);
-        this.imgSrc.src = "res/cloud.png";
+        this.imgSrc.src = "res/cloud-highres.png";
     }
 
     raiseAlpha() {

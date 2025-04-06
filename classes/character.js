@@ -5,7 +5,6 @@ class Character {
         this.xradius = 25;
         this.yradius = 16;
         this.speed = 16;
-        // todo: calculate the boundary based on the canvas size and the character size
         this.boundaryLeft = boundaryLeft;
         this.boundaryRight = boundaryRight;
         this.hasCollision = false;
@@ -27,18 +26,11 @@ class Character {
     }
 
     initBlocks() {
-        // TODO(yanlul) remove blocks if that is no longger needed
-        // this.blocks.push(new BlockCircle(this.x, this.y, this.radius));
         this.blocks.push(new BlockEllipse(this.x, this.y, this.xradius, this.yradius));
-        // this.blocks.push(new BlockRectangle(this.x - 15, this.y + this.radius, 30, 40));
-        // this.blocks.push(new BlockRectangle(this.x - 35, this.y + this.radius + 5, 20, 10));
-        // this.blocks.push(new BlockRectangle(this.x + 15, this.y + this.radius + 5, 20, 10));
-        // this.blocks.push(new BlockRectangle(this.x - 15, this.y + this.radius + 40, 10, 20));
-        // this.blocks.push(new BlockRectangle(this.x + 5, this.y + this.radius + 40, 10, 20));
     }
 
     update() {
-        if(this.hasCollision) {
+        if (this.hasCollision) {
             return;
         }
 
@@ -47,14 +39,14 @@ class Character {
         this.handDistance = 50 + Math.sin(this.handAngle) * 20;
 
         let dx = 0;
-        if(keys.ArrowLeft && this.x > this.boundaryLeft) {
+        if (keys.ArrowLeft && this.x > this.boundaryLeft) {
             dx = -this.speed;
         }
-        if(keys.ArrowRight && this.x < this.boundaryRight) {
+        if (keys.ArrowRight && this.x < this.boundaryRight) {
             dx = this.speed;
         }
 
-        for(let block of this.blocks) {
+        for (let block of this.blocks) {
             block.updateX(dx);
         }
 
@@ -63,46 +55,43 @@ class Character {
     }
 
     draw() {
-        for(let i = 0; i < this.blocks.length; i++) {
-            ctx.globalAlpha = 1.0;
-            ctx.fillStyle = "#FF0000";
-            // this.blocks[i].draw();
+        ctx.globalAlpha = 1.0;
+        ctx.fillStyle = "#FF0000";
 
-            // TODO(isakh): Improve how this is handled
-            ctx.drawImage(this.playerSprite, this.x - 32, this.y - 32, 64, 64);
-            const leftHandX = this.x - 32 + Math.cos(this.handAngle) * this.handDistance;
-            const leftHandY = this.y - 32 + 16 + Math.sin(this.handAngle) * this.handDistance;
-            const rightHandX = this.x + 32 + Math.cos(this.handAngle + Math.PI) * this.handDistance;
-            const rightHandY = this.y - 32 + 16 + Math.sin(this.handAngle + Math.PI) * this.handDistance;
+        // TODO(isakh): Improve how this is handled
+        ctx.drawImage(this.playerSprite, this.x - 32, this.y - 32, 64, 64);
+        const leftHandX = this.x - 32 + Math.cos(this.handAngle) * this.handDistance;
+        const leftHandY = this.y - 32 + 16 + Math.sin(this.handAngle) * this.handDistance;
+        const rightHandX = this.x + 32 + Math.cos(this.handAngle + Math.PI) * this.handDistance;
+        const rightHandY = this.y - 32 + 16 + Math.sin(this.handAngle + Math.PI) * this.handDistance;
 
-            ctx.beginPath();
-            ctx.moveTo(this.x - 32 - 24 + 32, this.y - 32 + 32);
-            ctx.lineTo(leftHandX, leftHandY);
-            ctx.strokeStyle = "#d3b764";
-            ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(this.x - 32 - 24 + 32, this.y - 32 + 32);
+        ctx.lineTo(leftHandX, leftHandY);
+        ctx.strokeStyle = "#f5bf2f";
+        ctx.stroke();
 
-            ctx.beginPath();
-            ctx.moveTo(this.x - 32 + 24 + 32, this.y - 32 + 32);
-            ctx.lineTo(rightHandX, rightHandY);
-            ctx.strokeStyle = "#d3b764";
-            ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(this.x - 32 + 24 + 32, this.y - 32 + 32);
+        ctx.lineTo(rightHandX, rightHandY);
+        ctx.strokeStyle = "#f5bf2f";
+        ctx.stroke();
 
-            ctx.save();
-            ctx.translate(leftHandX, leftHandY);
-            ctx.rotate(this.handAngle);
-            ctx.drawImage(leftHand, -16, -16, 32, 32);
-            ctx.restore();
+        ctx.save();
+        ctx.translate(leftHandX, leftHandY);
+        ctx.rotate(this.handAngle);
+        ctx.drawImage(leftHand, -16, -16, 32, 32);
+        ctx.restore();
 
-            ctx.save();
-            ctx.translate(rightHandX, rightHandY);
-            ctx.rotate(this.handAngle);
-            ctx.drawImage(rightHand, -16, -16, 32, 32);
-            ctx.restore();
-        }
+        ctx.save();
+        ctx.translate(rightHandX, rightHandY);
+        ctx.rotate(this.handAngle);
+        ctx.drawImage(rightHand, -16, -16, 32, 32);
+        ctx.restore();
     }
 
     updateByCollision(obstacle) {
-        if(this.hasCollision) {
+        if (this.hasCollision) {
             return;
         }
 
@@ -112,13 +101,13 @@ class Character {
     }
 
     checkCollision(obstacle) {
-        for(let block of this.blocks) {
+        for (let block of this.blocks) {
             // Consider the charactor as an eclipse shape
             const absolutePoints = obstacle.points.reduce((acc, point) => {
                 acc.push(point[0], point[1] + obstacle.offset);
                 return acc;
             }, []);
-            if  (Intersects.ellipsePolygon(block.x, block.y, block.xradius, block.yradius, absolutePoints)) {
+            if (Intersects.ellipsePolygon(block.x, block.y, block.xradius, block.yradius, absolutePoints)) {
                 return true;
             }
         }
