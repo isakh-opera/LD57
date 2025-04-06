@@ -53,12 +53,10 @@ var layers = [
 function handleLayers() {
     var maxLayer = layers.length - 1;
 
-    if (keyboard.key === "ArrowDown" && activeLayer > 0) {
+    if (keyboard.isArrowDown() && activeLayer > 0) {
         activeLayer--;
-        keyboard.key = null; // TODO(isakh): The keyboard manager should handle this
-    } else if (keyboard.key === "ArrowUp" && activeLayer < maxLayer) {
+    } else if (keyboard.isArrowUp() && activeLayer < maxLayer) {
         activeLayer++;
-        keyboard.key = null; // TODO(isakh): The keyboard manager should handle this
     }
 
     // Draw all layers with opacity based on distance from the active layer
@@ -69,6 +67,9 @@ function handleLayers() {
     }
 }
 
+/**
+ * Retuen obstabcles on the current active layer
+ */
 function getActiveObstacles() {
     return layers[activeLayer].shapes;
 }
