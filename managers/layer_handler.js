@@ -8,15 +8,13 @@ function drawLayer(layer) {
 // Layer Generation
 // =========================
 
-/**
- * Generates a Layer with a given number of obstacles, offset by x and y.
- */
-function generateLayer(obstacleAmount, xOffset, yOffset) {
+function generateLayer() {
     var layer = new Layer([]);
 
+    const obstacleAmount = delta(1, 10);
     for (let i = 0; i < obstacleAmount; i++) {
-        const x = window.innerWidth / 2 + xOffset;
-        const y = delta(yOffset - 300, yOffset) + 300;
+        const x = window.innerWidth / 2 + delta(-BACKGROUND_WIDTH / 2 + SHAPE_WIDTH / 2, BACKGROUND_WIDTH / 2 - SHAPE_WIDTH / 2);
+        const y = delta(window.innerHeight - 300, window.innerHeight) + 300;
 
         layer.shapes.push(
             new Shape(
@@ -38,9 +36,9 @@ function generateLayer(obstacleAmount, xOffset, yOffset) {
 // =========================
 
 var layers = [
-    generateLayer(1, -BACKGROUND_WIDTH / 2 + SHAPE_WIDTH / 2, window.innerHeight),
-    generateLayer(1, 0, window.innerHeight),
-    generateLayer(1, BACKGROUND_WIDTH / 2 - SHAPE_WIDTH / 2, window.innerHeight)
+    generateLayer(),
+    generateLayer(),
+    generateLayer()
 ];
 
 // =========================

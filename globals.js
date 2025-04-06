@@ -5,6 +5,9 @@ const SKY_GRADIENT_COLOR_2 = "#1E88E5";
 const gameTitle = new Image(77, 32);
 gameTitle.src = "res/gametitle-highres.png";
 
+const gameOverTitle = new Image(71, 14);
+gameOverTitle.src = "res/game-over.png";
+
 // ========== Player Settings ==========
 const playerBody = new Image(64, 64);
 playerBody.src = "res/player-highres.png";

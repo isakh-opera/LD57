@@ -5,14 +5,12 @@ class SpeedControler {
         this.currentRelativeSpeed = 0;
 
         this.speedIncreaseAmount = 1;
-        this.speedIncreaseInterval = 5; // 5 second
+        this.speedIncreaseInterval = 5000; // 5 second
     }
     
     getIncreaseAmount() {
         const currentTime = Date.now();
-        console.log("checking speed increase", currentTime - this.lastSpeedIncreaseTime);
         if (currentTime - this.lastSpeedIncreaseTime > this.speedIncreaseInterval) {
-            console.log("Speed increased");
             this.currentRelativeSpeed += this.speedIncreaseAmount;
             this.lastSpeedIncreaseTime = currentTime;
             return this.speedIncreaseAmount;

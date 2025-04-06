@@ -39,10 +39,14 @@ class Layer {
 
         if (createNext){
             createNext = false;
+
+            const x = window.innerWidth / 2 + delta(-BACKGROUND_WIDTH / 2 + SHAPE_WIDTH / 2, BACKGROUND_WIDTH / 2 - SHAPE_WIDTH / 2);
+            const y = delta(window.innerHeight - 300, window.innerHeight) + 300;
+
             this.shapes.push(
                 new Shape(
-                    this.shapes[0].x,
-                    delta(window.innerHeight-300,window.innerHeight) +300,
+                    x,
+                    y,
                     SHAPE_WIDTH,
                     SHAPE_WIDTH,
                     SHAPE_COLOR,

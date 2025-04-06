@@ -10,6 +10,16 @@ let WALLS_OFFSET = 0;
 
 let TITLE_ALPHA = 1;
 
+let ANIMATED_PLAYER_DATA = {
+    x: window.innerWidth / 2 - 640 / 2 + 128,
+    y: window.innerHeight / 2 - 32,
+    vx: 0,
+    vy: -5,
+    ax: 0.05,
+    ay: 0.2,
+    angleDir: -1,
+};
+
 // Track key states
 const keys = {
     ArrowLeft: false,
@@ -22,7 +32,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const character = new Character(
+let character = new Character(
     canvas.width / 2, canvas.height / 2,
     canvas.width / 2 - 640 / 2 + 20, canvas.width / 2 + 640 / 2 - 20);
 
@@ -33,6 +43,7 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
 });
 
+const endInput = document.getElementsByClassName('endgame-input')[0];
 // Add keyboard event listeners
 window.addEventListener("keydown", (e) => {
     if (e.key in keys) {
@@ -42,6 +53,12 @@ window.addEventListener("keydown", (e) => {
     if (e.code === "Space" && !PLAY_ANIMATION) {
         PLAY_ANIMATION = true;
         speedControler.reset();
+    }
+
+    if (e.code === "KeyR" && GAME_OVER) {
+        if(endInput.style.visibility !== 'visible') {
+            resetGameState();
+        }
     }
 });
 
@@ -57,16 +74,6 @@ const endgame = new Endgame();
 setInterval(() => {
     score.calculateTime();
 }, 1000);
-
-const ANIMATED_PLAYER_DATA = {
-    x: window.innerWidth / 2 - 640 / 2 + 128,
-    y: window.innerHeight / 2 - 32,
-    vx: 0,
-    vy: -5,
-    ax: 0.05,
-    ay: 0.2,
-    angleDir: -1,
-};
 
 let HAND_ANGLE = 0;
 let HAND_DISTANCE = 0;
@@ -240,7 +247,6 @@ for (let i = 0; i < 10; i++) {
     clouds.push(new Cloud());
 }
 
-
 async function drawEndgame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -256,25 +262,29 @@ async function drawEndgame() {
         [1, BACKGROUND_GRADIENT_COLOR_2],
     ]);
 
+    clouds.forEach(cloud => {
+        cloud.update();
+        if (PLAY_ANIMATION) {
+            cloud.lowerAlpha();
+        }
+        cloud.draw();
+    });
+
+    ctx.drawImage(gameOverTitle, window.innerWidth / 2 - 284/2, 64, 284, 56);
+
     ctx.fillStyle = "#000000";
-    ctx.font = "48px serif";
-
-    const title = "Game Over";
-    ctx.fillText(title, window.innerWidth / 2 - ctx.measureText(title).width / 2, 64);
-
-    // TODO: use actual score here
+    if(endInput.style.visibility !== 'visible') {
+        ctx.font = "24px serif";
+        const replayText = "(press r to play again)";
+        ctx.fillText(replayText, window.innerWidth / 2 - ctx.measureText(replayText).width / 2, 150);
+    } 
+    ctx.font = "32px serif";
     const finalScore = score.formatTime(score.getFinalScore());
     const scoreText = `Your Score: ${finalScore}`;
-    ctx.font = "36px serif";
-    ctx.fillText(scoreText, window.innerWidth / 2 - ctx.measureText(scoreText).width / 2, 150)
+    
+    ctx.fillText(scoreText, window.innerWidth / 2 - ctx.measureText(scoreText).width / 2, 220);
 
-    const inputText = 'Ranking';
-    ctx.font = "32px serif";
-    ctx.fillText(inputText, window.innerWidth / 2 - ctx.measureText(inputText).width / 2, 220);
-
-    // print ranking
     ctx.font = "24px serif";
-
     const ranking = endgame.getTop5Ranking();
 
     if (ranking.length < 5) {
@@ -294,24 +304,39 @@ async function drawEndgame() {
         userHeight+=40;
     }
 
-    /*
-    ctx.font = "24px serif";
-    const description = "(press space to play again)";
-    ctx.fillText(description, window.innerWidth / 2 - ctx.measureText(description).width / 2, 216);
-    */
-
-    ctx.drawImage(leftWall, window.innerWidth/2 - BACKGROUND_WIDTH/2, window.innerHeight/2, 128*1.5, 256*1.5);
-    ctx.drawImage(rightWall, window.innerWidth/2 + BACKGROUND_WIDTH/2 - 128*1.5, window.innerHeight/2, 128*1.5, 256*1.5);
+    ctx.drawImage(leftWall, window.innerWidth/2 - BACKGROUND_WIDTH/2, window.innerHeight/2 - 8, 128*1.5, 256*1.5);
+    ctx.drawImage(rightWall, window.innerWidth/2 + BACKGROUND_WIDTH/2 - 128*1.5, window.innerHeight/2 - 8, 128*1.5, 256*1.5);
 }
 
 function resetGameState() {
-    GAME_STARTED = false;
     GAME_OVER = false;
+    GAME_STARTED = false;
     PLAY_ANIMATION = false;
     ANIMATION_FINISHED = false;
     GRADIENT_OFFSET = 0;
     WALLS_OFFSET = 0;
     TITLE_ALPHA = 1;
+
+    ANIMATED_PLAYER_DATA = {
+        x: window.innerWidth / 2 - 640 / 2 + 128,
+        y: window.innerHeight / 2 - 32,
+        vx: 0,
+        vy: -5,
+        ax: 0.05,
+        ay: 0.2,
+        angleDir: -1,
+    };
+
+    character = new Character(
+        canvas.width / 2, canvas.height / 2,
+        canvas.width / 2 - 640 / 2 + 20, canvas.width / 2 + 640 / 2 - 20
+    );
+
+    layers = [
+        generateLayer(),
+        generateLayer(),
+        generateLayer()
+    ];
 }
 
 function update() {
@@ -334,6 +359,7 @@ function update() {
             WALLS_OFFSET = Math.min(window.innerHeight, WALLS_OFFSET + 10);
             if (WALLS_OFFSET === window.innerHeight) {
                 GAME_STARTED = true;
+                PLAY_ANIMATION = false;
                 score.resetTime();
             }
         }
@@ -364,7 +390,7 @@ function update() {
 
 function renderScore(width) {
     ctx.font = "50px Arial";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#f5bf2f";
     ctx.fillText(score.getTime(), width + 150, 70);
 }
 
