@@ -37,7 +37,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const character = new Character(
-    canvas.width / 2, canvas.height / 2, 
+    canvas.width / 2, canvas.height / 2,
     canvas.width / 2 - 640 / 2 + 20, canvas.width / 2 + 640 / 2 - 20);
 
 window.addEventListener("resize", () => {
@@ -45,7 +45,9 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
 });
 
+
 const score = new Score();
+const endgame = new Endgame();
 setInterval(() => {
     score.calculateTime();
 }, 1000);
@@ -96,7 +98,7 @@ const drawIntro = () => {
     ]);
 
     drawGradientRect(centerX, window.innerHeight / 2 - GRADIENT_OFFSET, 640, window.innerHeight, [
-        [0, "gray"],
+        [0, "#6c370b"],
         [1, "black"],
     ]);
 
@@ -109,12 +111,12 @@ const drawIntro = () => {
         ctx.lineTo(startX, window.innerHeight - WALLS_OFFSET);
         ctx.closePath();
         ctx.fill();
-        */
-        ctx.drawImage(obj, startX, window.innerHeight / 2 - WALLS_OFFSET - 8, 172, window.innerHeight / 2);
+        */ 
+        ctx.drawImage(obj, startX, window.innerHeight / 2 - WALLS_OFFSET - 8, 256, 512);
     };
 
     drawWall(leftWall, window.innerWidth / 2 - 640 / 2, 1);
-    drawWall(rightWall, window.innerWidth / 2 + 640 / 2 - 172, -1);
+    drawWall(rightWall, window.innerWidth / 2 + 640 / 2 - 256, -1);
 
     ctx.fillStyle = "#ff0000";
     ctx.drawImage(playerBody, ANIMATED_PLAYER_DATA.x, ANIMATED_PLAYER_DATA.y, 64, 64);
@@ -168,7 +170,7 @@ const drawIntro = () => {
 
     clouds.forEach(cloud => {
         cloud.update();
-        if(PLAY_ANIMATION) {
+        if (PLAY_ANIMATION) {
             cloud.lowerAlpha();
         }
         cloud.draw();
@@ -196,8 +198,11 @@ class Cloud {
         this.x = Math.random() * (640 - this.size) + (centerX - 640 / 2 + this.size);
         this.y = Math.random() * 256;
         this.speed = Math.random() * 0.5 + 0.2;
-        this.targetAlpha = Math.random(); 
+        this.targetAlpha = Math.random();
         this.alpha = 0;
+
+        this.imgSrc = new Image(32, 32);
+        this.imgSrc.src = "res/cloud.png";
     }
 
     raiseAlpha() {
@@ -230,10 +235,12 @@ class Cloud {
     }
 
     draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-        ctx.fill();
+        if(this.alpha < 0) {
+            this.alpha = 0;
+        }
+        ctx.globalAlpha = this.alpha;
+        ctx.drawImage(this.imgSrc, this.x, this.y, this.size, this.size);
+        ctx.globalAlpha = 1;
     }
 }
 
@@ -242,64 +249,64 @@ for (let i = 0; i < 10; i++) {
     clouds.push(new Cloud());
 }
 
-const endgame = new Endgame();
 
-function drawEndgame() {
+async function drawEndgame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    const grad = ctx.createLinearGradient(0, 0, 0, window.innerHeight/2);
+
+    const grad = ctx.createLinearGradient(0, 0, 0, window.innerHeight / 2);
     grad.addColorStop(0, "lightblue");
     grad.addColorStop(1, "darkblue");
 
     ctx.fillStyle = grad;
-    ctx.fillRect(window.innerWidth/2-640/2, 0, 640, window.innerHeight/2);
+    ctx.fillRect(window.innerWidth / 2 - 640 / 2, 0, 640, window.innerHeight / 2);
 
     const grad2 = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
-    grad2.addColorStop(0, "gray");
+    grad2.addColorStop(0, "#6c370b");
     grad2.addColorStop(1, "black");
 
     ctx.fillStyle = grad2;
-    ctx.fillRect(window.innerWidth/2-640/2, window.innerHeight/2, 640, window.innerHeight);
+    ctx.fillRect(window.innerWidth / 2 - 640 / 2, window.innerHeight / 2, 640, window.innerHeight);
 
-    ctx.fillRect(window.innerWidth/2+640/2-172, window.innerHeight/2, 172, window.innerHeight);
+    ctx.fillRect(window.innerWidth / 2 + 640 / 2 - 172, window.innerHeight / 2, 172, window.innerHeight);
 
     ctx.fillStyle = "#000000";
     ctx.font = "48px serif";
 
     const title = "Game Over";
-    ctx.fillText(title, window.innerWidth/2 - ctx.measureText(title).width/2, 64);
+    ctx.fillText(title, window.innerWidth / 2 - ctx.measureText(title).width / 2, 64);
 
     // TODO: use actual score here
-    const score = `Your Score: 00:00`;
+    const finalScore = score.formatTime(score.getFinalScore());
+    const scoreText = `Your Score: ${finalScore}`;
     ctx.font = "36px serif";
-    ctx.fillText(score, window.innerWidth/2 - ctx.measureText(score).width/2, 150)
+    ctx.fillText(scoreText, window.innerWidth / 2 - ctx.measureText(scoreText).width / 2, 150)
 
     const inputText = 'Ranking';
     ctx.font = "32px serif";
-    ctx.fillText(inputText, window.innerWidth/2 - ctx.measureText(inputText).width/2, 220);
+    ctx.fillText(inputText, window.innerWidth / 2 - ctx.measureText(inputText).width / 2, 220);
 
     // print ranking
     ctx.font = "24px serif";
 
-    // TODO: get data from postgres
-    ctx.fillText("User 1", window.innerWidth/2 - 200, 300);
-    ctx.fillText("00:00", window.innerWidth/2+100, 300);
-    
+    const ranking = endgame.getTop5Ranking();
 
-    ctx.fillText("User 2", window.innerWidth/2 - 200, 340);
-    ctx.fillText("00:00", window.innerWidth/2+100, 340);
+    if (ranking.length < 5) {
+        for (let counter = 0; counter < 5; counter++) {
+            if (typeof ranking[counter] === 'undefined') {
+                ranking[counter] = {};
+                ranking[counter].username = '-';
+                ranking[counter].score = 0;
+            }
+        }
+    }
 
-    ctx.fillText("User 3", window.innerWidth/2 - 200, 380);
-    ctx.fillText("00:00", window.innerWidth/2+100, 380);
 
-    ctx.fillText("User 4", window.innerWidth/2 - 200, 420);
-    ctx.fillText("00:00", window.innerWidth/2+100, 420);
-
-    ctx.fillText("User 5", window.innerWidth/2 - 200, 460);
-    ctx.fillText("00:00", window.innerWidth/2+100, 460);
-
-    // input
-    ctx.fillText(this.playerName || "Enter your name...", window.innerWidth/2 - 100, 500);
+    let userHeight = 300;
+    for (let user of ranking) {
+        ctx.fillText(user.username, window.innerWidth / 2 - 200, userHeight);
+        ctx.fillText(score.formatTime(user.score), window.innerWidth / 2 + 100, userHeight);
+        userHeight+=40;
+    }
 }
 
 function update() {
@@ -320,11 +327,14 @@ function update() {
             TITLE_ALPHA = Math.max(0, TITLE_ALPHA - 0.02);
             GRADIENT_OFFSET = Math.min(window.innerHeight / 2, GRADIENT_OFFSET + 10);
             WALLS_OFFSET = Math.min(window.innerHeight, WALLS_OFFSET + 10);
-            if (WALLS_OFFSET === window.innerHeight) GAME_STARTED = true;
+            if (WALLS_OFFSET === window.innerHeight) {
+                GAME_STARTED = true;
+                score.resetTime();
+            }
         }
     }
     else {
-        if(!GAME_OVER) {
+        if (!GAME_OVER) {
             draw();
 
             character.update();
@@ -338,7 +348,8 @@ function update() {
             }
         }
         else {
-            // TODO(isakh): Integrate game over screen
+            score.saveTime();
+            endgame.setFinalScore(score.getFinalScore());
             drawEndgame();
         }
     }
@@ -358,7 +369,7 @@ function renderCharacter() {
 
 function drawBackground() {
     const grad2 = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
-    grad2.addColorStop(0, "gray");
+    grad2.addColorStop(0, "#6c370b");
     grad2.addColorStop(1, "black");
 
     ctx.globalAlpha = 1.0;

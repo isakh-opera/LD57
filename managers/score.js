@@ -3,31 +3,42 @@ class Score {
         this.startTime = Date.now()
         this.time = "00:00";
         this.timeInMs = 0;
+        this.finalScore = 0;
+        this.gameAlreadySaved = false;
     }
 
     getTime() {
         return this.time;
     }
 
+    formatTime(t) {
+        const time = new Date(t);
+        const formatSeconds = time.getSeconds() < 10 ? `0${time.getSeconds()}` : time.getSeconds();
+        const formatMinutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
+        return `${formatMinutes}:${formatSeconds}`;
+    }
+
     calculateTime() {
         let calcTime = Date.now() - this.startTime;
-        let t = new Date(calcTime);
-    
-        let formatSeconds = t.getSeconds() < 10 ? `0${t.getSeconds()}` : t.getSeconds();
-        let formatMinutes = t.getMinutes() < 10 ? `0${t.getMinutes()}` : t.getMinutes();
-    
-        this.time = `${formatMinutes}:${formatSeconds}`;
+        this.time = this.formatTime(calcTime);
         this.calcTime = calcTime;
     }
 
     resetTime() {
         this.time = "00:00";
+        this.startTime = Date.now();
+        this.gameAlreadySaved = false;
     }
 
-    // TODO: call before game over
     saveTime() {
-        localStorage.setItem('gnocchi_droppy_final_score_ms', this.timeInMs);
-        localStorage.setItem('gnocchi_droppy_final_score', this.time);
+        if (!this.gameAlreadySaved){
+            this.finalScore = this.calcTime;
+            this.gameAlreadySaved = true;
+        }
+    }
+
+    getFinalScore() {
+        return this.finalScore;
     }
 }
 
