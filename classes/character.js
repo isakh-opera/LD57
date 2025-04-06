@@ -1,3 +1,21 @@
+class BlockEllipse {
+    constructor(x, y, xradius, yradius) {
+        this.x = x;
+        this.y = y;
+        this.xradius = xradius;
+        this.yradius = yradius;
+        this.dx = 0;
+    }
+
+    updateX(dx) {   
+        this.x += dx;
+    }
+
+    updateY(dy) {
+        this.y += dy;
+    }
+}
+
 class Character {
     constructor(x, y, boundaryLeft, boundaryRight) {
         this.x = x;
