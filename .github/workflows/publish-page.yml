@@ -1,3 +1,10 @@
+name: Publish game
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   # Build job
   build:
