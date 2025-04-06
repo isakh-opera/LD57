@@ -1,6 +1,8 @@
 
 class Endgame {
     constructor() {
+        this.backendUrl = 'https://gnocchidroppy-be7efe02bcba.herokuapp.com';
+
         this.endInput = document.getElementsByClassName('endgame-input')[0];
         this.scoreName = document.getElementById('score_name');
         this.scoreButton = document.getElementById('score_button');
@@ -20,7 +22,7 @@ class Endgame {
 
     async saveFinalScore(username, score) {
         try {
-            await fetch('http://localhost:3000/api/highscores', {
+            await fetch(`${this.backendUrl}/api/highscores`, {
                 method: 'POST',
                 body: JSON.stringify({
                     username,
@@ -38,7 +40,7 @@ class Endgame {
 
     async listTop5Ranking() {
         try {
-            const response = await fetch('http://localhost:3000/api/highscores', {
+            const response = await fetch(`${this.backendUrl}/api/highscores`, {
                 method: 'GET',
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"

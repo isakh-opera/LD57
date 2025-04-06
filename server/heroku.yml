@@ -1,0 +1,12 @@
+setup:
+  addons:
+    - plan: essential-0
+      as: DATABASE
+
+build:
+  docker:
+    web: Dockerfile
+run:
+  web:  npm run start
+  config:
+    PORT: $PORT
