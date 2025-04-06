@@ -263,8 +263,6 @@ function update() {
         draw();
 
         character.update();
-
-        handleLayers();
     }
 
     requestAnimationFrame(update);
@@ -294,8 +292,9 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawBackground();
-    renderScore(window.innerWidth / 2);
+    handleLayers();
     renderCharacter();
+    renderScore(window.innerWidth / 2);
 }
 
 requestAnimationFrame(update);

@@ -60,6 +60,7 @@ class Character {
 
     draw() {
         for(let i = 0; i < this.blocks.length; i++) {
+            ctx.globalAlpha = 1.0;
             ctx.fillStyle = "#FF0000";
             this.blocks[i].draw();
 
