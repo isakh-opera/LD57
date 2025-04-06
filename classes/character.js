@@ -2,13 +2,15 @@ class Character {
     constructor(x, y, boundaryLeft, boundaryRight) {
         this.x = x;
         this.y = y;
-        this.radius = 20;
+        this.xradius = 25;
+        this.yradius = 16;
         this.speed = 16;
         // todo: calculate the boundary based on the canvas size and the character size
         this.boundaryLeft = boundaryLeft;
         this.boundaryRight = boundaryRight;
         this.hasCollision = false;
         this.blocks = [];
+        this.initBlocks();
 
         // TODO(isakh): Improve how this is handled
         this.playerSprite = new Image(64, 64);
@@ -25,7 +27,9 @@ class Character {
     }
 
     initBlocks() {
-        this.blocks.push(new BlockCircle(this.x, this.y, this.radius));
+        // TODO(yanlul) remove blocks if that is no longger needed
+        // this.blocks.push(new BlockCircle(this.x, this.y, this.radius));
+        this.blocks.push(new BlockEllipse(this.x, this.y, this.xradius, this.yradius));
         // this.blocks.push(new BlockRectangle(this.x - 15, this.y + this.radius, 30, 40));
         // this.blocks.push(new BlockRectangle(this.x - 35, this.y + this.radius + 5, 20, 10));
         // this.blocks.push(new BlockRectangle(this.x + 15, this.y + this.radius + 5, 20, 10));
@@ -62,7 +66,7 @@ class Character {
         for(let i = 0; i < this.blocks.length; i++) {
             ctx.globalAlpha = 1.0;
             ctx.fillStyle = "#FF0000";
-            this.blocks[i].draw();
+            // this.blocks[i].draw();
 
             // TODO(isakh): Improve how this is handled
             ctx.drawImage(this.playerSprite, this.x - 32, this.y - 32, 64, 64);
@@ -109,11 +113,12 @@ class Character {
 
     checkCollision(obstacle) {
         for(let block of this.blocks) {
+            // Consider the charactor as an eclipse shape
             const absolutePoints = obstacle.points.reduce((acc, point) => {
                 acc.push(point[0], point[1] + obstacle.offset);
                 return acc;
             }, []);
-            if  (Intersects.circlePolygon(block.x, block.y, block.radius, absolutePoints)) {
+            if  (Intersects.ellipsePolygon(block.x, block.y, block.xradius, block.yradius, absolutePoints)) {
                 return true;
             }
         }

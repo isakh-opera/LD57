@@ -1,7 +1,6 @@
 
 class Endgame {
     constructor() {
-        this.endgameInput = document.getElementsByClassName('endgame_input')[0];
         this.scoreName = document.getElementById('score_name');
         this.scoreButton = document.getElementById('score_button');
         this.finalScore = 0; //timestamp
@@ -32,14 +31,4 @@ class Endgame {
     setFinalScore(score) {
         this.finalScore = score;
     }
-
-    // need to create the layout for the endgame input
-    showEndgameInput(width, height, ctx) {
-        this.endgameInput.style.display = "block";
-    }
-
-    hideEndgameInput() {
-        this.endgameInput.style.display = "none" 
-    }
-    
 }

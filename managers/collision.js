@@ -4,10 +4,10 @@ class Block {
         this.y = y;
     }
 
-    draw() {
-        // Default implementation in base class
-        throw new Error('Block.draw() must be implemented by subclass');
-    }
+    // draw() {
+    //     // Default implementation in base class
+    //     throw new Error('Block.draw() must be implemented by subclass');
+    // }
 
     updateX(dx) {
         this.x += dx;
@@ -15,6 +15,22 @@ class Block {
 
     updateY(dy) {
         this.y += dy;
+    }
+}
+
+class BlockEllipse extends Block {
+    constructor(x, y, xradius, yradius) {
+        super(x, y);
+        this.xradius = xradius;
+        this.yradius = yradius;
+        this.dx = 0;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y, this.xradius, this.yradius, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#00FF00';
+        ctx.fill();
     }
 }
 

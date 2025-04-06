@@ -1,5 +1,6 @@
 function KeyboardManager() {
     this.key = null;
+
 }
 
 let keyboard = new KeyboardManager();

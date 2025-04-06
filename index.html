@@ -9,17 +9,13 @@
 </head>
 
 <body>
-    <!-- TODO(isakh): Uncomment when we keep track of end game state
-    TODO(isakh): Make absolute and put at bottom of screen
-    <div class="endgame-input">
+    <div class="endgame-input" style="visibility:hidden;">
 		<div>Please, fill your name</div>
 		<input id="score_name" type="text" />
 		<div>
 			<button id="score_button" type="button">Save Score</button>
 		</div>
 	</div>
-    <script src="classes/endgame.js"></script>
-    -->
 
     <!-- Main game canvas -->
     <canvas id="canvas"></canvas>
@@ -43,6 +39,7 @@
     <script src="classes/shape.js"></script>
     <script src="classes/character.js"></script>
     <script src="classes/layer.js"></script>
+    <script src="classes/endgame.js"></script>
 
     <!-- =======================
          GAME MANAGERS

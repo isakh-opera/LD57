@@ -10,13 +10,13 @@ window.addEventListener("resize", () => {
 });
 
 function update() {
-    draw();
+    drawEndgame();
     requestAnimationFrame(update);
 }
 
 const endgame = new Endgame();
 
-function draw() {
+function drawEndgame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     const grad = ctx.createLinearGradient(0, 0, 0, window.innerHeight/2);
