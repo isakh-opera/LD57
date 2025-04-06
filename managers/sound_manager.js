@@ -1,6 +1,7 @@
 function SoundManager() {
     this.sounds = {};
     this.music = null;
+    this.isPlaying = false;
 }
 
 SoundManager.prototype.loadSound = function (name, url) {
@@ -30,6 +31,7 @@ SoundManager.prototype.playMusic = function () {
         this.music.play().catch((error) => {
             console.error("Error playing music:", error);
         });
+        this.isPlaying = true;
     } else {
         console.warn("Music not loaded!");
     }
@@ -45,6 +47,7 @@ SoundManager.prototype.stopMusic = function () {
     if (this.music) {
         this.music.pause();
         this.music.currentTime = 0;
+        this.isPlaying = false;
     }
 };
 

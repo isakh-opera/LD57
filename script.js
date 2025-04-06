@@ -63,7 +63,14 @@ const drawGradientRect = (x, y, w, h, stops) => {
     ctx.fillRect(x, y, w, h);
 };
 
+let soundManager = new SoundManager();
+soundManager.loadMusic("./res/LDjam2025__menu.mp3");
+
 const drawIntro = () => {
+    if(!soundManager.isPlaying) {
+        soundManager.playMusic();
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const centerX = window.innerWidth / 2 - 640 / 2;
@@ -315,6 +322,9 @@ function resetGameState() {
         generateLayer(),
         generateLayer()
     ];
+
+    soundManager.stopMusic();
+    soundManager.loadMusic("./res/LDjam2025__menu.mp3");
 }
 
 function update() {
@@ -337,6 +347,11 @@ function update() {
             WALLS_OFFSET = Math.min(window.innerHeight, WALLS_OFFSET + 10);
             if (WALLS_OFFSET === window.innerHeight) {
                 GAME_STARTED = true;
+                
+                soundManager.stopMusic();
+                soundManager.loadMusic("./res/LDjam2025.mp3");
+                soundManager.playMusic();
+                
                 PLAY_ANIMATION = false;
                 score.resetTime();
             }
@@ -352,6 +367,11 @@ function update() {
             });
             if (character.hasCollision) {
                 GAME_OVER = true;
+
+                soundManager.stopMusic();
+                soundManager.loadMusic("./res/LDjam2025__menu.mp3");
+                soundManager.playMusic();
+
                 const endInput = document.getElementsByClassName('endgame-input')[0];
                 endInput.style.visibility = 'visible';
             }
