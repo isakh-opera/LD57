@@ -109,63 +109,12 @@ class Character {
 
     checkCollision(obstacle) {
         for(let block of this.blocks) {
-            if(block instanceof BlockCircle && obstacle instanceof BlockCircle) {
-                if (checkCollisionBetweenCircleAndCircle(block, obstacle)) {
-                    console.log('collision circle and circle');
-                    return true;
-                }
-            } else if(block instanceof BlockCircle && obstacle instanceof BlockRectangle) {
-                if (checkCollisionBetweenCircleAndRect(block, obstacle)) {
-                    console.log('collision circle and rect');
-                    return true;
-                }
-            } else if(block instanceof BlockCircle && obstacle instanceof BlockPolygon) {
-                if (checkCollisionBetweenCircleAndPolygon(block, obstacle)) {
-                    console.log('collision circle and polygon');
-                    return true;
-                }
-            }
-
-            if (block instanceof BlockRectangle && obstacle instanceof BlockCircle) {
-                if (checkCollisionBetweenCircleAndRect(obstacle, block)) {
-                    console.log('collision rect and circle');
-                    return true;
-                }
-            }
-
-            if (block instanceof BlockRectangle && obstacle instanceof BlockRectangle) {
-                if (checkCollisionBetweenRectAndRect(block, obstacle)) {
-                    console.log('collision rect and rect');
-                    return true;
-                }
-            }
-
-            if (block instanceof BlockRectangle && obstacle instanceof BlockPolygon) {
-                if (checkCollisionBetweenRectAndPolygon(block, obstacle)) {
-                    console.log('collision rect and polygon');
-                    return true;
-                }
-            }
-
-            if (block instanceof BlockPolygon && obstacle instanceof BlockCircle) {
-                if (checkCollisionBetweenCircleAndPolygon(obstacle, block)) {
-                    console.log('collision polygon and circle');
-                    return true;
-                }
-            }
-
-            if (block instanceof BlockPolygon && obstacle instanceof BlockRectangle) {
-                if (checkCollisionBetweenRectAndPolygon(obstacle, block)) {
-                    console.log('collision polygon and rect');
-                    return true;
-                }
-            }
-
-            if (block instanceof BlockPolygon && obstacle instanceof BlockPolygon) {
-                if (checkCollisionBetweenPolygonAndPolygon(block, obstacle)) {
-                    console.log('collision polygon and polygon');
-                    return true;
-                }
+            const absolutePoints = obstacle.points.reduce((acc, point) => {
+                acc.push(point[0], point[1] + polygon.offset);
+                return acc;
+            }, []);
+            if  (Intersects.circlePolygon(block.x, block.y, block.radius, absolutePoints)) {
+                return true;
             }
         }
         return false;
