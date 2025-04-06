@@ -58,7 +58,12 @@ class Shape {
     }
 
     draw(context) {
-        context.fillStyle = this.color;
+        if(this.alpha < 1.0) {
+            context.fillStyle = this.color;
+        }
+        else {
+            context.fillStyle = "#7d3f0c";
+        }
         context.beginPath();
 
         context.globalAlpha = this.alpha;
@@ -74,7 +79,12 @@ class Shape {
     }
 
     drawWithOffset(context) {
-        context.fillStyle = this.color;
+        if(this.alpha < 1.0) {
+            context.fillStyle = this.color;
+        }
+        else {
+            context.fillStyle = "#7d3f0c";
+        }
         context.beginPath();
 
         context.globalAlpha = this.alpha;
